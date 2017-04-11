@@ -1,0 +1,67 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: redis02-pvc
+  labels:
+    app: redis02-pvc
+  annotations:
+    volume.alpha.kubernetes.io/storage-class: default
+spec:
+  accessModes: 
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis02
+  labels:
+    app: redis02
+spec:
+  template:
+    metadata:
+      labels:
+        app: redis02
+    spec:
+      containers:
+      - name: redis02
+        image: bitnami/redis:3.2.8-r2
+        imagePullPolicy: Always
+        ports:
+        - name: redis
+          containerPort: 6379
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+        volumeMounts:
+        - name: "redis-conf"
+          mountPath: "/etc/redis"
+        - name: "redis-data"
+          mountPath: "/var/lib/redis"
+      volumes:
+        - name: "redis-data"
+          persistentVolumeClaim:
+            claimName: redis02-pvc
+        - name: "redis-conf"
+          configMap:
+            name: "redis-conf"
+            items:
+              - key: "redis.conf"
+                path: "redis.conf"

@@ -1,0 +1,14 @@
+alpha:
+  listen: 0.0.0.0:22121
+  hash: murmur
+  distribution: ketama
+  auto_eject_hosts: true
+  redis: true
+  server_connections: 1
+  server_retry_timeout: 30000
+  timeout: 4000
+  server_failure_limit: 3
+  preconnect: true
+  servers:
+    - redis01:6379:1 redis01
+    - redis02:6379:1 redis02
