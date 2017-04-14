@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER Tuan Anh Tran "me@tuananh.org"
+LABEL maintainer "Tuan Anh Tran <me@tuananh.org>"
 
 # install dependencies
 RUN apt-get update
