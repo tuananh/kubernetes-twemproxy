@@ -1,10 +1,9 @@
-FROM ubuntu:16.04
+FROM alpine:latest
 
 LABEL maintainer "Tuan Anh Tran <me@tuananh.org>"
 
 # install dependencies
-RUN apt-get update
-RUN apt-get install -y libtool make automake curl supervisor
+RUN apk add --update g++ libtool make automake curl autoconf supervisor
 
 # copy files and create necessary folders
 RUN mkdir -p /var/log/supervisor
@@ -14,8 +13,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN curl -qL https://github.com/twitter/twemproxy/archive/v0.4.1.tar.gz | tar xzf -
 RUN cd  twemproxy-0.4.1 && autoreconf -fvi && ./configure --enable-debug=log && make && make install
 
-RUN apt-get remove make automake curl
+RUN apk del g++ libtool make automake curl autoconf
 
 EXPOSE 22121
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

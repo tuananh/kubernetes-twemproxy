@@ -54,7 +54,7 @@ Fire up an Ubuntu container and check if twemproxy is working as expected.
 
 ```
 kubectl run -i --tty ubuntu --image=ubuntu --restart=Never /bin/bash
-apt-get update && apt-get install redis-tools
+apt-get update && apt-get install -y redis-tools
 redis-cli -h twemproxy -p 22121
 set foo bar
 get foo
