@@ -14,6 +14,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN curl -qL https://github.com/twitter/twemproxy/archive/v0.4.1.tar.gz | tar xzf -
 RUN cd  twemproxy-0.4.1 && autoreconf -fvi && ./configure --enable-debug=log && make && make install
 
+RUN apt-get remove make automake curl
+
 EXPOSE 22121
 
 CMD ["/usr/bin/supervisord"]
