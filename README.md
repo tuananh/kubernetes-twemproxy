@@ -43,7 +43,7 @@ alpha:
 Create the configmap, deployment and service for twemproxy
 
 ```
-kubectl create configmap twemproxy-conf --from-file=twemproxy.yml
+kubectl create configmap twemproxy-conf --from-file=twemproxy.yaml
 kubectl create -f deployments/twemproxy.yaml
 kubectl create -f services/twemproxy.yaml
 ```
